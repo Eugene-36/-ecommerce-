@@ -40,34 +40,49 @@ export const StateContext = ({ children }) => {
     toast.success(`${qty} ${product.name} added to the cart.`);
   };
 
+  const onRemove = (product) => {
+    foundProduct = cartItems.find((item) => item._id === product._id);
+    const newCartItems = cartItems.filter((item) => item._id !== product._id);
+
+    setTotalPrice(
+      (prevTotalPrice) =>
+        prevTotalPrice - foundProduct.price * foundProduct.quantity
+    );
+    setTotalQuantities(
+      (prevTotalQuantities) => prevTotalQuantities - foundProduct.quantity
+    );
+
+    setCartItems(newCartItems);
+  };
+
   const toggleCartItemQuanitity = (id, value) => {
-    console.log('item.id', id);
     foundProduct = cartItems.find((item) => item._id === id);
     index = cartItems.findIndex((product) => product._id === id);
-    const newCartItems = cartItems.filter((item) => item._id !== id);
-    console.log('newCartItems', newCartItems);
-    // console.log('id', id);
-    // console.log('value', value);
 
-    // console.log('cartItems', cartItems);
     if (value === 'inc') {
-      console.log('foundProduct', foundProduct);
-      setCartItems([
-        ...newCartItems,
-        { ...foundProduct, quantity: foundProduct.quantity + 1 },
-      ]);
+      setCartItems(
+        cartItems.map((item, i) =>
+          i === index
+            ? { ...foundProduct, quantity: foundProduct.quantity + 1 }
+            : item
+        )
+      );
       setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price);
       setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
     } else if (value === 'dec') {
       if (foundProduct.quantity > 1) {
-        setCartItems([
-          ...newCartItems,
-          { ...foundProduct, quantity: foundProduct.quantity - 1 },
-        ]);
+        setCartItems(
+          cartItems.map((item, i) =>
+            i === index
+              ? { ...foundProduct, quantity: foundProduct.quantity - 1 }
+              : item
+          )
+        );
         setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price);
         setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
       }
     }
+    // console.log('cartItems', cartItems);
   };
 
   // Функция для увеличения счётчика  количества товара
@@ -98,6 +113,7 @@ export const StateContext = ({ children }) => {
         onAdd,
         setShowCart,
         toggleCartItemQuanitity,
+        onRemove,
       }}
     >
       {children}
