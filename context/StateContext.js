@@ -82,7 +82,7 @@ export const StateContext = ({ children }) => {
         setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
       }
     }
-    // console.log('cartItems', cartItems);
+
   };
 
   // Функция для увеличения счётчика  количества товара
@@ -114,6 +114,9 @@ export const StateContext = ({ children }) => {
         setShowCart,
         toggleCartItemQuanitity,
         onRemove,
+        setCartItems,
+        setTotalPrice,
+        setTotalQuantities,
       }}
     >
       {children}
