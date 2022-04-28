@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   AiOutlineMinus,
@@ -15,6 +15,7 @@ import getStripe from '../lib/getStripe';
 
 const Cart = () => {
   const cartRef = useRef();
+  const [itm, setItm] = useState([]);
   const {
     totalPrice,
     totalQuantities,
@@ -27,7 +28,6 @@ const Cart = () => {
   const handleCheckout = async () => {
     const stripe = await getStripe();
 
-   
     const response = await fetch('/api/stripe', {
       method: 'POST',
       headers: {
@@ -35,17 +35,31 @@ const Cart = () => {
       },
       body: JSON.stringify(cartItems),
     });
-    
+
     if (response.statusCode === 500) return;
 
     const data = await response.json();
 
-    
     toast.loading('Redirecting...');
 
     stripe.redirectToCheckout({ sessionId: data.id });
   };
 
+  //!!==========================================
+  // useEffect(() => {
+  //   localStorage.setItem(
+  //     'data',
+  //     JSON.stringify({ cartItems, totalQuantities, totalPrice })
+  //   );
+  // }, [cartItems, totalQuantities, totalPrice]);
+
+  let gotItmes = JSON.parse(localStorage.getItem('data'));
+  console.log('gotItmes', gotItmes[0].totalQuant);
+  //gotItmes.totalPr
+  // gotItmes[0].singleCart
+  //gotItmes[0].singleCart.price
+  //gotItmes[0].singleCart.quantity
+  //totalQuant
   return (
     <div className='cart-wrapper' ref={cartRef}>
       <div className='cart-container'>
@@ -56,10 +70,12 @@ const Cart = () => {
         >
           <AiOutlineLeft />
           <span className='heading'>Your Cart</span>
-          <span className='cart-num-items'>({totalQuantities} items)</span>
+          <span className='cart-num-items'>
+            ({gotItmes[0].totalQuant} items)
+          </span>
         </button>
 
-        {cartItems.length < 1 && (
+        {gotItmes[0].singleCart.length < 1 && (
           <div className='empty-cart'>
             <AiOutlineShopping size={150} />
             <h3>Your shopping bag is empty</h3>
@@ -76,8 +92,8 @@ const Cart = () => {
         )}
 
         <div className='product-container'>
-          {cartItems.length >= 1 &&
-            cartItems.map((item, index) => (
+          {gotItmes[0].singleCart.length >= 1 &&
+            gotItmes[0].singleCart.map((item, index) => (
               <div className='product' key={item._id}>
                 <img
                   src={urlFor(item?.image[0])}
@@ -123,11 +139,11 @@ const Cart = () => {
               </div>
             ))}
         </div>
-        {cartItems.length >= 1 && (
+        {gotItmes[0].singleCart.length >= 1 && (
           <div className='cart-bottom'>
             <div className='total'>
               <h3>Subtotal: </h3>
-              <h3>${totalPrice}</h3>
+              <h3>${gotItmes[0].totalPr}</h3>
             </div>
             <div className='btn-container'>
               <button type='button' className='btn' onClick={handleCheckout}>

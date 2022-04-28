@@ -32,6 +32,7 @@ export const StateContext = ({ children }) => {
             quantity: cartProduct.quantity + quantity,
           };
       });
+
       setCartItems(updatedCartItems);
     } else {
       product.quantity = quantity;
@@ -82,7 +83,6 @@ export const StateContext = ({ children }) => {
         setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
       }
     }
-
   };
 
   // Функция для увеличения счётчика  количества товара
@@ -99,6 +99,7 @@ export const StateContext = ({ children }) => {
       return prevQty - 1;
     });
   };
+
 
   return (
     <Context.Provider

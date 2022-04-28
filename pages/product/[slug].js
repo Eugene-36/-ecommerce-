@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { client, urlFor } from '../../lib/client';
 import {
   AiOutlineMinus,
@@ -12,7 +12,27 @@ import { useStateContext } from '../../context/StateContext';
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price } = product;
   const [index, setIndex] = useState(0);
-  const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
+  const {
+    decQty,
+    incQty,
+    qty,
+    onAdd,
+    setShowCart,
+    cartItems,
+    totalPrice,
+    totalQuantities,
+  } = useStateContext();
+
+  // console.log('product', product);
+
+  const addToBucket = (singleCart, totalPr, totalQuant) => {
+    console.log('totalQuant', totalQuant);
+
+    localStorage.setItem(
+      'data',
+      JSON.stringify([{ singleCart, totalPr, totalQuant }])
+    );
+  };
 
   const handleByNow = () => {
     onAdd(product, qty);
@@ -75,7 +95,10 @@ const ProductDetails = ({ product, products }) => {
             <button
               type='button'
               className='add-to-cart'
-              onClick={() => onAdd(product, qty)}
+              onClick={() => {
+                onAdd(product, qty);
+                addToBucket(cartItems, totalPrice, totalQuantities);
+              }}
             >
               Add to Cart
             </button>
