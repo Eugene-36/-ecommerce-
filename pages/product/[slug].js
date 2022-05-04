@@ -19,20 +19,10 @@ const ProductDetails = ({ product, products }) => {
     onAdd,
     setShowCart,
     cartItems,
+    updated,
     totalPrice,
     totalQuantities,
   } = useStateContext();
-
-  // console.log('product', product);
-
-  const addToBucket = (singleCart, totalPr, totalQuant) => {
-    console.log('totalQuant', totalQuant);
-
-    localStorage.setItem(
-      'data',
-      JSON.stringify([{ singleCart, totalPr, totalQuant }])
-    );
-  };
 
   const handleByNow = () => {
     onAdd(product, qty);
@@ -95,10 +85,7 @@ const ProductDetails = ({ product, products }) => {
             <button
               type='button'
               className='add-to-cart'
-              onClick={() => {
-                onAdd(product, qty);
-                addToBucket(cartItems, totalPrice, totalQuantities);
-              }}
+              onClick={() => onAdd(product, qty)}
             >
               Add to Cart
             </button>

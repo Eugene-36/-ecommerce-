@@ -9,6 +9,7 @@ export const StateContext = ({ children }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantities, setTotalQuantities] = useState(0);
   const [qty, setQty] = useState(1);
+  const [updated, setUpdated] = useState([]);
 
   let foundProduct;
   let index;
@@ -34,9 +35,11 @@ export const StateContext = ({ children }) => {
       });
 
       setCartItems(updatedCartItems);
+      setUpdated(updatedCartItems);
     } else {
       product.quantity = quantity;
       setCartItems([...cartItems, { ...product }]);
+      console.log('cartItemsonAdd', cartItems);
     }
     toast.success(`${qty} ${product.name} added to the cart.`);
   };
@@ -99,20 +102,19 @@ export const StateContext = ({ children }) => {
       return prevQty - 1;
     });
   };
-
-
   return (
     <Context.Provider
       value={{
         showCart,
+        setShowCart,
         cartItems,
         totalPrice,
         totalQuantities,
         qty,
+        updated,
         incQty,
         decQty,
         onAdd,
-        setShowCart,
         toggleCartItemQuanitity,
         onRemove,
         setCartItems,

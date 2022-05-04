@@ -5,35 +5,8 @@ import { Cart } from './';
 import { useStateContext } from '../context/StateContext';
 
 const Navbar = () => {
-  const { showCart, setShowCart, totalQuantities, qty } = useStateContext();
-  const [quan, setQuan] = useState(0);
+  const { showCart, setShowCart, totalQuantities } = useStateContext();
 
-  console.log('quan', quan);
-  useEffect(() => {
-    let digit = JSON.parse(localStorage.getItem('data'));
-    console.log('digit', digit[0].totalQuant);
-    setQuan(digit[0].totalQuant);
-  }, []);
-  // if (typeof window !== 'undefined') {
-  //   if (localStorage.getItem('data')) {
-  //     let digit = JSON.parse(localStorage.getItem('data'));
-  //     console.log('digit', digit[0].totalQuant);
-  //     quan = digit[0].totalQuant;
-  //   } else {
-  //     return [];
-  //   }
-  // }
-  // useEffect(() => {
-  //let gotItmes = JSON.parse(localStorage.getItem('data'));
-
-  //   if (!gotItmes) {
-  //     return;
-  //   } else {
-  //     setQuan(gotItmes[0].totalQuant);
-  //   }
-
-  //   // console.log('gotItmes');
-  // }, [quan]);
   return (
     <div className='navbar-container'>
       <p className='logo'>
@@ -46,7 +19,7 @@ const Navbar = () => {
         onClick={() => setShowCart(true)}
       >
         <AiOutlineShopping />
-        <span className='cart-item-qty'>{quan}</span>
+        <span className='cart-item-qty'>{totalQuantities}</span>
       </button>
 
       {showCart && <Cart />}

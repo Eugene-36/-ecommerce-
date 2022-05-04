@@ -45,21 +45,6 @@ const Cart = () => {
     stripe.redirectToCheckout({ sessionId: data.id });
   };
 
-  //!!==========================================
-  // useEffect(() => {
-  //   localStorage.setItem(
-  //     'data',
-  //     JSON.stringify({ cartItems, totalQuantities, totalPrice })
-  //   );
-  // }, [cartItems, totalQuantities, totalPrice]);
-
-  let gotItmes = JSON.parse(localStorage.getItem('data'));
-  console.log('gotItmes', gotItmes[0].totalQuant);
-  //gotItmes.totalPr
-  // gotItmes[0].singleCart
-  //gotItmes[0].singleCart.price
-  //gotItmes[0].singleCart.quantity
-  //totalQuant
   return (
     <div className='cart-wrapper' ref={cartRef}>
       <div className='cart-container'>
@@ -70,12 +55,10 @@ const Cart = () => {
         >
           <AiOutlineLeft />
           <span className='heading'>Your Cart</span>
-          <span className='cart-num-items'>
-            ({gotItmes[0].totalQuant} items)
-          </span>
+          <span className='cart-num-items'>({totalQuantities} items)</span>
         </button>
 
-        {gotItmes[0].singleCart.length < 1 && (
+        {cartItems.length < 1 && (
           <div className='empty-cart'>
             <AiOutlineShopping size={150} />
             <h3>Your shopping bag is empty</h3>
@@ -92,8 +75,8 @@ const Cart = () => {
         )}
 
         <div className='product-container'>
-          {gotItmes[0].singleCart.length >= 1 &&
-            gotItmes[0].singleCart.map((item, index) => (
+          {cartItems.length >= 1 &&
+            cartItems.map((item, index) => (
               <div className='product' key={item._id}>
                 <img
                   src={urlFor(item?.image[0])}
@@ -102,7 +85,7 @@ const Cart = () => {
                 />
                 <div className='item-desc'>
                   <div className='flex top'>
-                    <h5>{item.name}</h5>
+                    <h5>{item?.name}</h5>
                     <h4>${item.price}</h4>
                   </div>
                   <div className='flex bottom'>
@@ -139,11 +122,11 @@ const Cart = () => {
               </div>
             ))}
         </div>
-        {gotItmes[0].singleCart.length >= 1 && (
+        {cartItems.length >= 1 && (
           <div className='cart-bottom'>
             <div className='total'>
               <h3>Subtotal: </h3>
-              <h3>${gotItmes[0].totalPr}</h3>
+              <h3>${totalPrice}</h3>
             </div>
             <div className='btn-container'>
               <button type='button' className='btn' onClick={handleCheckout}>
